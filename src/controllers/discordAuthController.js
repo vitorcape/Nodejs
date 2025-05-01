@@ -7,6 +7,9 @@ const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'kcRcXpdlBJ0A13rA15bj
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'https://nodejs-production-b4a4.up.railway.app/auth/discord/callback';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const SECRET = process.env.SECRET || 'minha_chave_secreta';
+const avatarUrl = avatar
+    ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
+    : null;
 
 exports.discordCallback = async (req, res) => {
     const code = req.query.code;
@@ -32,7 +35,7 @@ exports.discordCallback = async (req, res) => {
             headers: { Authorization: `Bearer ${access_token}` }
         });
 
-        const { id, username, email } = userRes.data;
+        const { id, username, email, avatar } = userRes.data;
 
         // Criar ou buscar usuário no banco
         let usuario = await User.findOne({ email });
@@ -42,7 +45,8 @@ exports.discordCallback = async (req, res) => {
                 email,
                 nickname: username.toLowerCase(),
                 senha: 'discord', // pode ser substituído por hash aleatório
-                role: 'user'
+                role: 'user',
+                avatarUrl: avatarUrl
             });
         }
 
