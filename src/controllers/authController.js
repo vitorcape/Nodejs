@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const SECRET = 'minha_chave_secreta';
 
 exports.register = async (req, res) => {
-    const { nome, email, senha } = req.body;
+    const { nome, nickname, email, senha } = req.body;
     try {
         const existe = await User.findOne({ email });
         if (existe) return res.status(400).json({ error: 'Email já cadastrado' });
