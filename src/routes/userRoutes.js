@@ -7,6 +7,8 @@ const adminOnly = require('../middleware/adminOnly');
 // Rota pública apenas usada no Postman (não usada no front)
 router.post('/', userController.createUser);
 
+router.get('/', auth, userController.getUsers);
+
 // ✅ Somente admin pode ver todos os usuários
 router.get('/', auth, adminOnly, userController.getUsers);
 
