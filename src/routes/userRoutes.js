@@ -8,7 +8,7 @@ const adminOnly = require('../middleware/adminOnly');
 router.post('/', userController.createUser);
 
 // ✅ Somente admin pode ver todos os usuários
-router.get('/', auth, adminOnly, userController.getAllUsers);
+router.get('/', auth, adminOnly, userController.getUsers);
 
 // ✅ Todos logados podem ver seu próprio ID
 router.get('/:id', auth, userController.getUserById);
@@ -21,5 +21,7 @@ router.put('/:id/senha', auth, userController.atualizarSenha);
 
 // ✅ Apenas admin pode deletar qualquer usuário
 router.delete('/:id', auth, adminOnly, userController.deleteUser);
+
+router.put('/:id/promover', auth, adminOnly, userController.promoverParaAdmin);
 
 module.exports = router;

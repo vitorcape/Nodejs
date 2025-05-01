@@ -63,7 +63,7 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-// validar a senha
+// Validar a senha
 exports.atualizarSenha = async (req, res) => {
     const userId = req.params.id;
     const { senhaAtual, novaSenha } = req.body;
@@ -84,3 +84,18 @@ exports.atualizarSenha = async (req, res) => {
         res.status(500).json({ error: 'Erro ao atualizar senha' });
     }
 };
+
+// Promover para Admin
+exports.promoverParaAdmin = async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { role: 'admin' },
+            { new: true }
+        );
+        if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+        res.json({ mensagem: 'Usuário promovido a administrador', usuario: user });
+    } catch (err) {
+        res.status(500).json({ error: 'Erro ao promover usuário' });
+    }
+};  
