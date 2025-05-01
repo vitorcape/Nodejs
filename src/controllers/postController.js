@@ -3,7 +3,7 @@ const Counter = require('../models/Counter');
 
 exports.criarPost = async (req, res) => {
     const { titulo, conteudo } = req.body;
-    const { id, email } = req.user;
+    const { id, nome, nickname, email, avatarUrl } = req.user;
 
     try {
         const novoPost = await Post.create({
@@ -32,7 +32,7 @@ exports.buscarPosts = async (req, res) => {
 
 exports.criarPost = async (req, res) => {
     const { titulo, conteudo } = req.body;
-    const { id, nome, nickname, email } = req.user;
+    const { id, nome, nickname, email, avatarUrl } = req.user;
 
     try {
         let counter = await Counter.findOneAndUpdate(

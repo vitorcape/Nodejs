@@ -35,11 +35,12 @@ exports.login = async (req, res) => {
         const senhaValida = await bcrypt.compare(senha, user.senha);
         if (!senhaValida) return res.status(401).json({ error: 'Senha inválida' });
 
-        const token = jwt.sign(
+        jwt.sign(
             {
                 id: user._id,
                 email: user.email,
                 nome: user.nome,
+                avatarUrl: user.avatarUrl,
                 role: user.role
             },
             SECRET,
