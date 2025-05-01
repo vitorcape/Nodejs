@@ -6,6 +6,7 @@ const cors = require('cors');
 const logRoutes = require('./routes/logRoutes');
 const loginLogRoutes = require('./routes/loginLogRoutes');
 const discordRoutes = require('./routes/discordRoutes');
+const postRoutes = require('./routes/postRoutes');
 
 require('dotenv').config();
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use('/logs', logRoutes);
 app.use('/login-logs', loginLogRoutes);
 app.use('/auth/discord', discordRoutes);
+app.use('/posts', postRoutes);
 
 app.get('/', (req, res) => res.send('API funcionando!'));
 app.use('/usuarios', userRoutes); // <-- e esse .use() aqui!
