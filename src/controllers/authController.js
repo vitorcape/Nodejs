@@ -41,6 +41,17 @@ exports.login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
+        const LoginLog = require('../models/LoginLog');
+
+        await LoginLog.create({
+            usuario: {
+                id: user._id,
+                email: user.email
+            },
+            ip: req.ip,
+            userAgent: req.headers['user-agent']
+        });
+
         res.json({ token });
     } catch (err) {
         res.status(500).json({ error: err.message });
