@@ -34,11 +34,22 @@ exports.getUserById = async (req, res) => {
 
 // Atualizar um usuário
 exports.updateUser = async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Segurança opcional: impedir que role seja alterado por usuários comuns
+    if (updates.role) delete updates.role;
+
+    // Só permite o próprio usuário ou admin editar
+    if (req.user.id !== id && req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Você só pode editar seu próprio perfil' });
+    }
+
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const user = await User.findByIdAndUpdate(id, updates, { new: true });
         res.json(user);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: 'Erro ao atualizar usuário' });
     }
 };
 
@@ -56,20 +67,20 @@ exports.deleteUser = async (req, res) => {
 exports.atualizarSenha = async (req, res) => {
     const userId = req.params.id;
     const { senhaAtual, novaSenha } = req.body;
-  
+
     try {
-      const usuario = await User.findById(userId);
-      if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
-  
-      const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
-      if (!senhaValida) return res.status(401).json({ error: 'Senha atual incorreta' });
-  
-      const novaHash = await bcrypt.hash(novaSenha, 10);
-      usuario.senha = novaHash;
-      await usuario.save();
-  
-      res.json({ mensagem: 'Senha atualizada com sucesso!' });
+        const usuario = await User.findById(userId);
+        if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
+
+        const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
+        if (!senhaValida) return res.status(401).json({ error: 'Senha atual incorreta' });
+
+        const novaHash = await bcrypt.hash(novaSenha, 10);
+        usuario.senha = novaHash;
+        await usuario.save();
+
+        res.json({ mensagem: 'Senha atualizada com sucesso!' });
     } catch (err) {
-      res.status(500).json({ error: 'Erro ao atualizar senha' });
+        res.status(500).json({ error: 'Erro ao atualizar senha' });
     }
 };

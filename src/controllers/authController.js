@@ -12,7 +12,12 @@ exports.register = async (req, res) => {
         if (existe) return res.status(400).json({ error: 'Email já cadastrado' });
 
         const senhaHash = await bcrypt.hash(senha, 10);
-        const novoUsuario = await User.create({ nome, email, senha: senhaHash });
+        const novoUsuario = await User.create({
+            nome,
+            email,
+            senha: senhaHash,
+            role: 'user'  // ✅ força papel padrão
+        });
 
         res.status(201).json({ mensagem: 'Usuário criado com sucesso' });
     } catch (err) {
@@ -29,7 +34,11 @@ exports.login = async (req, res) => {
         const senhaValida = await bcrypt.compare(senha, user.senha);
         if (!senhaValida) return res.status(401).json({ error: 'Senha inválida' });
 
-        const token = jwt.sign({ id: user._id, email: user.email }, SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(
+            { id: user._id, email: user.email, role: user.role },
+            SECRET,
+            { expiresIn: '1h' }
+        );
 
         res.json({ token });
     } catch (err) {
