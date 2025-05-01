@@ -45,7 +45,7 @@ exports.criarPost = async (req, res) => {
             numero: counter.valor, // número sequencial
             titulo,
             conteudo,
-            autor: { id, nome, nickname, email }
+            autor: { id, nome, nickname, email, avatarUrl }
         });
 
         res.status(201).json(novoPost);
