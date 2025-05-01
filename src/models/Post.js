@@ -7,6 +7,7 @@ const postSchema = new mongoose.Schema({
         id: String,
         email: String
     },
+    numero: { type: Number, unique: true },
     dataCriacao: { type: Date, default: Date.now }
 });
 
