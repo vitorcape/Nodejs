@@ -14,9 +14,10 @@ exports.register = async (req, res) => {
         const senhaHash = await bcrypt.hash(senha, 10);
         const novoUsuario = await User.create({
             nome,
+            nickname,
             email,
             senha: senhaHash,
-            role: 'user'  // ✅ força papel padrão
+            role: 'user'
         });
 
         res.status(201).json({ mensagem: 'Usuário criado com sucesso' });
