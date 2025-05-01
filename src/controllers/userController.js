@@ -5,6 +5,21 @@ const bcrypt = require('bcryptjs');
 exports.createUser = async (req, res) => {
     try {
         const user = await User.create(req.body);
+
+        const registrarLog = require('../utils/registrarLog');
+
+        await registrarLog({
+            acao: 'Promoveu usuário para admin',
+            autor: {
+                id: req.user.id,
+                email: req.user.email
+            },
+            alvo: {
+                id: user._id,
+                email: user.email
+            }
+        });
+
         res.status(201).json(user);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -26,6 +41,21 @@ exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+
+        const registrarLog = require('../utils/registrarLog');
+
+        await registrarLog({
+            acao: 'Promoveu usuário para admin',
+            autor: {
+                id: req.user.id,
+                email: req.user.email
+            },
+            alvo: {
+                id: user._id,
+                email: user.email
+            }
+        });
+
         res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -47,6 +77,21 @@ exports.updateUser = async (req, res) => {
 
     try {
         const user = await User.findByIdAndUpdate(id, updates, { new: true });
+
+        const registrarLog = require('../utils/registrarLog');
+
+        await registrarLog({
+            acao: 'Promoveu usuário para admin',
+            autor: {
+                id: req.user.id,
+                email: req.user.email
+            },
+            alvo: {
+                id: user._id,
+                email: user.email
+            }
+        });
+
         res.json(user);
     } catch (err) {
         res.status(500).json({ error: 'Erro ao atualizar usuário' });
@@ -57,6 +102,21 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
+
+        const registrarLog = require('../utils/registrarLog');
+
+        await registrarLog({
+            acao: 'Promoveu usuário para admin',
+            autor: {
+                id: req.user.id,
+                email: req.user.email
+            },
+            alvo: {
+                id: user._id,
+                email: user.email
+            }
+        });
+
         res.json({ message: 'Usuário deletado com sucesso' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -79,6 +139,20 @@ exports.atualizarSenha = async (req, res) => {
         usuario.senha = novaHash;
         await usuario.save();
 
+        const registrarLog = require('../utils/registrarLog');
+
+        await registrarLog({
+            acao: 'Promoveu usuário para admin',
+            autor: {
+                id: req.user.id,
+                email: req.user.email
+            },
+            alvo: {
+                id: user._id,
+                email: user.email
+            }
+        });
+
         res.json({ mensagem: 'Senha atualizada com sucesso!' });
     } catch (err) {
         res.status(500).json({ error: 'Erro ao atualizar senha' });
@@ -94,8 +168,22 @@ exports.promoverParaAdmin = async (req, res) => {
             { new: true }
         );
         if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+        const registrarLog = require('../utils/registrarLog');
+
+        await registrarLog({
+            acao: 'Promoveu usuário para admin',
+            autor: {
+                id: req.user.id,
+                email: req.user.email
+            },
+            alvo: {
+                id: user._id,
+                email: user.email
+            }
+        });
+
         res.json({ mensagem: 'Usuário promovido a administrador', usuario: user });
     } catch (err) {
         res.status(500).json({ error: 'Erro ao promover usuário' });
     }
-};  
+};

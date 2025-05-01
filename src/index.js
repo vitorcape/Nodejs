@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const logRoutes = require('./src/routes/logRoutes');
 require('dotenv').config();
 
 console.log("MONGO_URI:", process.env.MONGO_URI);
@@ -10,6 +11,7 @@ const userRoutes = require('./routes/userRoutes'); // <-- esse require aqui!
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/logs', logRoutes);
 
 app.get('/', (req, res) => res.send('API funcionando!'));
 app.use('/usuarios', userRoutes); // <-- e esse .use() aqui!
