@@ -14,7 +14,7 @@ exports.discordCallback = async (req, res) => {
     if (!code) return res.status(400).json({ error: 'Código não fornecido' });
 
     try {
-        // Trocar o código por um token de acesso
+        // Trocar código por token de acesso
         const tokenRes = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
@@ -28,7 +28,7 @@ exports.discordCallback = async (req, res) => {
 
         const { access_token } = tokenRes.data;
 
-        // Obter dados do usuário do Discord
+        // Obter dados do Discord
         const userRes = await axios.get('https://discord.com/api/users/@me', {
             headers: { Authorization: `Bearer ${access_token}` }
         });
@@ -39,21 +39,21 @@ exports.discordCallback = async (req, res) => {
             ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
             : null;
 
-        // Criar ou buscar usuário no banco
+        // Criar ou obter usuário
         let usuario = await User.findOne({ email });
         if (!usuario) {
             usuario = await User.create({
                 nome: username,
                 email,
                 nickname: username.toLowerCase(),
-                senha: 'discord', // pode ser substituído por hash aleatório
+                senha: 'discord',
                 role: 'user',
-                avatarUrl: avatarUrl
+                avatarUrl
             });
         }
 
-        // Gerar token JWT
-        jwt.sign(
+        // Gerar token JWT e SALVAR
+        const token = jwt.sign(
             {
                 id: usuario._id,
                 email: usuario.email,
@@ -75,7 +75,7 @@ exports.discordCallback = async (req, res) => {
             userAgent: req.headers['user-agent']
         });
 
-        // Redirecionar para o front com o token
+        // Redirecionar com token
         res.redirect(`${FRONTEND_URL}/login?token=${token}`);
     } catch (err) {
         console.error('Erro no login via Discord:', err.response?.data || err.message);
