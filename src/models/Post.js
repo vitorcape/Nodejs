@@ -5,6 +5,8 @@ const postSchema = new mongoose.Schema({
     conteudo: { type: String, required: true },
     autor: {
         id: String,
+        nome: String,
+        nickname: String,
         email: String
     },
     numero: { type: Number, unique: true },

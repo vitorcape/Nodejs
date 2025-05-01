@@ -32,7 +32,7 @@ exports.buscarPosts = async (req, res) => {
 
 exports.criarPost = async (req, res) => {
     const { titulo, conteudo } = req.body;
-    const { id, email } = req.user;
+    const { id, nome, nickname, email } = req.user;
 
     try {
         let counter = await Counter.findOneAndUpdate(
@@ -45,7 +45,7 @@ exports.criarPost = async (req, res) => {
             numero: counter.valor, // número sequencial
             titulo,
             conteudo,
-            autor: { id, email }
+            autor: { id, nome, nickname, email }
         });
 
         res.status(201).json(novoPost);
