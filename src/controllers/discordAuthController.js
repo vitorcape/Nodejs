@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID || '1367606726102351973';
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'kcRcXpdlBJ0A13rA15bj50555fQhDqJN';
-const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/auth/discord/callback';
+const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'https://nodejs-production-b4a4.up.railway.app/auth/discord/callback';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const SECRET = process.env.SECRET || 'minha_chave_secreta';
 
