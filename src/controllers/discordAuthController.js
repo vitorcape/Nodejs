@@ -54,7 +54,12 @@ exports.discordCallback = async (req, res) => {
 
         // Gerar token JWT
         const token = jwt.sign(
-            { id: usuario._id, email: usuario.email, role: usuario.role },
+            {
+                id: user._id,
+                email: user.email,
+                nome: user.nome,
+                role: user.role
+            },
             SECRET,
             { expiresIn: '1h' }
         );
