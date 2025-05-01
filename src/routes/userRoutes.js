@@ -10,5 +10,6 @@ router.put('/:id', userController.updateUser);
 router.delete('/:id', userController.deleteUser);
 router.delete('/:id', auth, userController.deleteUser);
 router.put('/:id', auth, userController.updateUser);
+router.put('/:id/senha', auth, userController.atualizarSenha);
 
 module.exports = router;

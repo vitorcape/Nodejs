@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
 
 // Criar novo usuário
 exports.createUser = async (req, res) => {
@@ -48,5 +50,27 @@ exports.deleteUser = async (req, res) => {
         res.json({ message: 'Usuário deletado com sucesso' });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+};
+
+// validar a senha
+exports.atualizarSenha = async (req, res) => {
+    const userId = req.params.id;
+    const { senhaAtual, novaSenha } = req.body;
+  
+    try {
+      const usuario = await User.findById(userId);
+      if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
+  
+      const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
+      if (!senhaValida) return res.status(401).json({ error: 'Senha atual incorreta' });
+  
+      const novaHash = await bcrypt.hash(novaSenha, 10);
+      usuario.senha = novaHash;
+      await usuario.save();
+  
+      res.json({ mensagem: 'Senha atualizada com sucesso!' });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao atualizar senha' });
     }
 };
