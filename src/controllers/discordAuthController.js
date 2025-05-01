@@ -1,6 +1,7 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const LoginLog = require('../models/LoginLog');
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID || '1367606726102351973';
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'kcRcXpdlBJ0A13rA15bj50555fQhDqJN';
@@ -57,6 +58,16 @@ exports.discordCallback = async (req, res) => {
             SECRET,
             { expiresIn: '1h' }
         );
+
+        // Salvar log de login
+        await LoginLog.create({
+            usuario: {
+                id: usuario._id,
+                email: usuario.email
+            },
+            ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+            userAgent: req.headers['user-agent']
+        });
 
         // Redirecionar para o front com o token
         res.redirect(`${FRONTEND_URL}/login?token=${token}`);
