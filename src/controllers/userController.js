@@ -45,7 +45,7 @@ exports.getUserById = async (req, res) => {
         const registrarLog = require('../utils/registrarLog');
 
         await registrarLog({
-            acao: 'Promoveu usuário para admin',
+            acao: 'Buscou um usuário por ID',
             autor: {
                 id: req.user.id,
                 email: req.user.email
@@ -81,7 +81,7 @@ exports.updateUser = async (req, res) => {
         const registrarLog = require('../utils/registrarLog');
 
         await registrarLog({
-            acao: 'Promoveu usuário para admin',
+            acao: 'Atualizou um usuário',
             autor: {
                 id: req.user.id,
                 email: req.user.email
@@ -106,7 +106,7 @@ exports.deleteUser = async (req, res) => {
         const registrarLog = require('../utils/registrarLog');
 
         await registrarLog({
-            acao: 'Promoveu usuário para admin',
+            acao: 'Deleteu um usuário',
             autor: {
                 id: req.user.id,
                 email: req.user.email
@@ -142,7 +142,7 @@ exports.atualizarSenha = async (req, res) => {
         const registrarLog = require('../utils/registrarLog');
 
         await registrarLog({
-            acao: 'Promoveu usuário para admin',
+            acao: 'Atualizou a senha',
             autor: {
                 id: req.user.id,
                 email: req.user.email
