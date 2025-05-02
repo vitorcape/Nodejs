@@ -9,7 +9,7 @@ exports.criarPost = async (req, res) => {
         const novoPost = await Post.create({
             titulo,
             conteudo,
-            autor: { id, email }
+            autor: { id, nome, nickname, email, avatarUrl }
         });
         res.status(201).json(novoPost);
     } catch (err) {

@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const logRoutes = require('./routes/logRoutes');
 const loginLogRoutes = require('./routes/loginLogRoutes');
 const discordRoutes = require('./routes/discordRoutes');
@@ -31,6 +32,16 @@ app.use('/usuarios', userRoutes); // <-- e esse .use() aqui!
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
+
+// Serve o React em produção
+if (process.env.NODE_ENV === 'production') {
+    const clientPath = path.join(__dirname, '../client/build');
+    app.use(express.static(clientPath));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(clientPath, 'index.html'));
+    });
+}
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
